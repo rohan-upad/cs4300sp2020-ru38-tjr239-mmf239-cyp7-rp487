@@ -37,7 +37,6 @@ async def query():
                     rating
                     }
                 }
-
             }
             }
             ''')
