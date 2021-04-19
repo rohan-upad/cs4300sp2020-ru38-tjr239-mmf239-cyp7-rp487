@@ -1,5 +1,5 @@
 from . import *  
-from app.irsystem.controllers.asynch_yelp_query import *
+from app.irsystem.controllers.async_yelp_query import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 
@@ -16,7 +16,6 @@ def search():
 	else:
 		output_message = "Your search: " + locations
 		data = get_request(locations.split(", "), preferences)
-		print(data)
 
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
 
