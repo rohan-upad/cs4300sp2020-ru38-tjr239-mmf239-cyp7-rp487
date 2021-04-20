@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <div class="topcorner">
+    <div class="topcorner hidden">
         <p>Project Name: {{ name }}</p>
         <p>Student Names: ({{ netid }})</p>
     </div>
@@ -18,19 +18,25 @@
         <br><br>
 
         <div class="form-group">
-            <input id="input" type="text" name="locations" class="form-control" placeholder="Your Input">
+            <input id="input" type="text" name="locations" class="form-control" placeholder="Locations">
         </div>
         <div class="form-group">
-            <input id="input" type="text" name="preferences" class="form-control" placeholder="Your Input">
+            <input id="input" type="text" name="preferences" class="form-control" placeholder="Preferences">
         </div>
         <button type="submit" class="btn btn-info"> Go! </button>
     </form>
     <form class="form-inline global-search">
         {% if data %}
         <h1>{{output_message}}</h1>
-        {% for d in data %}
+        {% for l in output %}
         <br>
-        <p>{{d}}</p>
+        <strong><h2>{{l}}</h2></strong>
+        <br>
+        <h4>Food</h4>
+        <p>{{output[l][0]}}</p>
+        <br>
+        <h4>Activities</h4>
+        <p>{{output[l][1]}}</p>
         {% endfor %} {% endif %}
     </form>
 </body>

@@ -29,12 +29,19 @@ def getQuery(interest,place):
     return query
 
 async def execute_query(session, interest, place, preferences):
-    result = await session.execute(getQuery(interest,place))
-    # call tims function
-    # return similarity(result)
-    # return top 3 businesses 
-    return result["search"]["business"][0]["name"]
-
+    result = await session.execute(getQuery(interest,place)) 
+    countlist = []
+    for business in range(50):
+        counter = 0
+        merged_reviews = ""
+        for review in range(len(result['search']['business'][business]['reviews'])):
+            merged_reviews += result['search']['business'][business]['reviews'][review]['text']
+        for pref in preferences:
+            counter+= merged_reviews.count(pref)
+        countlist.append((counter, result['search']['business'][business]['name']))
+    countlist.sort(key=lambda tup: tup[0], reverse=True)
+    new_list = [ seq[1] for seq in countlist]
+    return new_list[:3]
 
 # Then create a couroutine which will connect to your API and run all your queries as tasks.
 # We use a `backoff` decorator to reconnect using exponential backoff in case of connection failure.
@@ -42,7 +49,7 @@ async def execute_query(session, interest, place, preferences):
 #@backoff.on_exception(backoff.expo, Exception, max_time=300)
 async def graphql_connection(places, preferences):
     results = []
-    api_key = "cnLXWAkkm24bIO09xAVZv9IPWhXo7TJwSjNKU7EZ2LdzBc8EwGC1gs6eP5-sn-u5Vt-6mzEBK_szWjk4NWDRYv-sC-AO43cFjp-Z_K7Up652-upZ4JB-GinH9pVvYHYx"
+    api_key = "6pbvkg-r5El8vFNEci4AF7MPBRUTrG-BQ-gqhwwdQgWeFPBGbUWCXUdZaqULhTBJeCcLk2d1e3vjP_A3BXFVoPHRSrn6D3jEvHZRwKgIdz1Ct6QSPBUhkBanOXtvYHYx"
 
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),
