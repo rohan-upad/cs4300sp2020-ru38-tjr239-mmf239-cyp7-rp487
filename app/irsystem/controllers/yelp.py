@@ -6,7 +6,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 
 
 async def query():
-    api_key = "BVPfPm_aHqdVa241VGRbocCemXYajr4_QNOkrx0XfQkMqyyNALQEx-D4BH-YBRFtKt-9SuIVODiPPJffJlmgIsXAwo-5YFCCRZVZvA2i-9u2L-nJn3eGRSgc13FwYHYx"
+    api_key = "6pbvkg-r5El8vFNEci4AF7MPBRUTrG-BQ-gqhwwdQgWeFPBGbUWCXUdZaqULhTBJeCcLk2d1e3vjP_A3BXFVoPHRSrn6D3jEvHZRwKgIdz1Ct6QSPBUhkBanOXtvYHYx"
 
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),

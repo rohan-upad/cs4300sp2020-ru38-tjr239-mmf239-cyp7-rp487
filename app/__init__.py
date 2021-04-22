@@ -1,5 +1,6 @@
 # Gevent needed for sockets
 from gevent import monkey
+from flask_cors import CORS
 monkey.patch_all()
 
 # Imports
@@ -10,9 +11,10 @@ from flask_socketio import SocketIO
 
 # Configure app
 socketio = SocketIO()
-app = Flask(__name__)
+app = Flask(__name__, template_folder="frontend/build", static_folder="frontend/build/static")
 app.config.from_object(os.environ["APP_SETTINGS"])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+CORS(app)
 
 # DB
 db = SQLAlchemy(app)
