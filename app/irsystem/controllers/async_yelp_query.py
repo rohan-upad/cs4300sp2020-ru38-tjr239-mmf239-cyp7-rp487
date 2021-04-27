@@ -2,11 +2,17 @@
 
 import asyncio
 import time 
+import json
+import random
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
 
-#places = ['''zion''','''grand canyon''','''sedona''']
 interests = ['''food''','''activities''']
+
+def getAPIKey():
+    f = open('app/irsystem/controllers/apikeys.json',)
+    data = json.load(f)
+    return random.choice(list(data.values()))
 
 def getQuery(interest,place):
     query = gql('''{
@@ -41,6 +47,7 @@ async def execute_query(session, interest, place, preferences):
         countlist.append((counter, result['search']['business'][business]['name']))
     countlist.sort(key=lambda tup: tup[0], reverse=True)
     new_list = [ seq[1] for seq in countlist]
+    print(new_list[:3])
     return new_list[:3]
 
 # Then create a couroutine which will connect to your API and run all your queries as tasks.
@@ -49,7 +56,8 @@ async def execute_query(session, interest, place, preferences):
 #@backoff.on_exception(backoff.expo, Exception, max_time=300)
 async def graphql_connection(places, preferences):
     results = []
-    api_key = "6pbvkg-r5El8vFNEci4AF7MPBRUTrG-BQ-gqhwwdQgWeFPBGbUWCXUdZaqULhTBJeCcLk2d1e3vjP_A3BXFVoPHRSrn6D3jEvHZRwKgIdz1Ct6QSPBUhkBanOXtvYHYx"
+    
+    api_key = getAPIKey()
 
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),
@@ -69,3 +77,5 @@ def get_request(place, preferences):
     print(place)
     print(preferences)
     return asyncio.run(graphql_connection(place, preferences))
+
+
