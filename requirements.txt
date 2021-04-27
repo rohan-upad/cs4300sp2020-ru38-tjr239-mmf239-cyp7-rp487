@@ -62,3 +62,4 @@ websockets==8.1
 Werkzeug==0.16.1
 WTForms==2.2.1
 yarl==1.6.3
+flask-cors==3.0.10
