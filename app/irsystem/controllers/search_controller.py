@@ -17,7 +17,7 @@ def search():
 		data = []
 		output = {}
 	else:
-		data = get_request(locations.split(", "), preferences)
+		data = get_request(locations.split(", "), preferences.split(", "))
 		locations = locations.split(", ")
 
 		for i in range(len(locations)):

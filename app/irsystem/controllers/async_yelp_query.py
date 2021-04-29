@@ -9,6 +9,22 @@ from gql.transport.aiohttp import AIOHTTPTransport
 
 interests = ['''food''','''activities''']
 
+def get_features():
+    f = open('app/irsystem/controllers/features_vecs_lda.json',)
+    data = json.load(f)
+    categories = []
+    for diction in data:
+        categories.append(list(diction.keys()))
+    return categories
+
+features = get_features()
+
+def get_prefs(pref):
+    for feat in features:
+        if pref in feat:
+            return feat
+    return []
+
 def getAPIKey():
     f = open('app/irsystem/controllers/apikeys.json',)
     data = json.load(f)
@@ -19,7 +35,8 @@ def getQuery(interest,place):
         search(term:"''' + interest + '''",
             location:"''' + place + '''",
             radius: 40000,
-            limit: 50) {
+            limit: 50,
+            sort_by: "rating") {
                 total
                 business {
                     name
@@ -52,7 +69,6 @@ async def execute_query(session, interest, place, preferences):
         countlist.append((counter, result['search']['business'][business]['name']))
     countlist.sort(key=lambda tup: tup[0], reverse=True)
     new_list = [ seq[1] for seq in countlist]
-    print(new_list[:3])
     return new_list[:3]
 
 # Then create a couroutine which will connect to your API and run all your queries as tasks.
@@ -86,6 +102,12 @@ async def graphql_connection(places, preferences):
         return results
 
 def get_request(place, preferences):
-    return asyncio.run(graphql_connection(place, preferences))
+    new_preferences = preferences
+    for pref in preferences:
+        similar_words = get_prefs(pref)
+        if similar_words:
+            new_preferences.extend(similar_words)
+    new_preferences = list(set(new_preferences))
+    return asyncio.run(graphql_connection(place, new_preferences))
 
 
