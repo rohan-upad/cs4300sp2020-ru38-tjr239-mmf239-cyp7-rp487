@@ -24,6 +24,11 @@ def getQuery(interest,place):
                 business {
                     name
                     alias
+                    price
+                    rating
+                    display_phone
+                    url
+                    photos
                     reviews {
                         text
                         rating
@@ -37,7 +42,7 @@ def getQuery(interest,place):
 async def execute_query(session, interest, place, preferences):
     result = await session.execute(getQuery(interest,place)) 
     countlist = []
-    for business in range(50):
+    for business in range(len(result['search']['business'])):
         counter = 0
         merged_reviews = ""
         for review in range(len(result['search']['business'][business]['reviews'])):
@@ -56,9 +61,7 @@ async def execute_query(session, interest, place, preferences):
 #@backoff.on_exception(backoff.expo, Exception, max_time=300)
 async def graphql_connection(places, preferences):
     results = []
-    
     api_key = getAPIKey()
-
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),
             'Content-Type': "application/json"}
@@ -66,16 +69,23 @@ async def graphql_connection(places, preferences):
 
     client = Client(transport=transport, fetch_schema_from_transport=True)
     async with client as session:
-        for spot in places:
-            task1 = asyncio.create_task(execute_query(session,interests[0],spot, preferences)) 
-            task2 = asyncio.create_task(execute_query(session,interests[1],spot, preferences)) 
-
-            results.append(await asyncio.gather(task1, task2))
+        for i in range(0,len(places),2):
+            spot = places[i]
+            task1 = asyncio.create_task(execute_query(session,interests[0],spot,preferences)) 
+            task2 = asyncio.create_task(execute_query(session,interests[1],spot,preferences)) 
+            if i + 1 < len(places):
+                spot2 = places[i+1]
+                task3 = asyncio.create_task(execute_query(session,interests[0],spot2,preferences)) 
+                task4 = asyncio.create_task(execute_query(session,interests[1],spot2,preferences)) 
+                ans = await asyncio.gather(task1, task2, task3, task4)
+                results.append(ans[:2])
+                results.append(ans[2:])
+            else:
+                results.append(await asyncio.gather(task1, task2))
+            
         return results
 
 def get_request(place, preferences):
-    print(place)
-    print(preferences)
     return asyncio.run(graphql_connection(place, preferences))
 
 

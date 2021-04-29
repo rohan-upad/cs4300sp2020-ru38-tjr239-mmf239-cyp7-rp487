@@ -19,7 +19,7 @@ def search():
 	else:
 		data = get_request(locations.split(", "), preferences)
 		locations = locations.split(", ")
-		
+
 		for i in range(len(locations)):
 			location = locations[i]
 			recs = [str(data[i][0]), str(data[i][1])]
