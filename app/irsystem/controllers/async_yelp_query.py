@@ -107,12 +107,12 @@ async def graphql_connection(places, preferences):
     async with client as session:
         for i in range(0,len(places),2):
             spot = places[i]
-            task1 = asyncio.create_task(execute_query(session,interests[0],spot,preferences)) 
-            task2 = asyncio.create_task(execute_query(session,interests[1],spot,preferences)) 
+            task1 = asyncio.create_task(execute_query(session,interests[0],spot,preferences[0])) 
+            task2 = asyncio.create_task(execute_query(session,interests[1],spot,preferences[1])) 
             if i + 1 < len(places):
                 spot2 = places[i+1]
-                task3 = asyncio.create_task(execute_query(session,interests[0],spot2,preferences)) 
-                task4 = asyncio.create_task(execute_query(session,interests[1],spot2,preferences)) 
+                task3 = asyncio.create_task(execute_query(session,interests[0],spot2,preferences[0])) 
+                task4 = asyncio.create_task(execute_query(session,interests[1],spot2,preferences[1])) 
                 ans = await asyncio.gather(task1, task2, task3, task4)
                 results.append(ans[:2])
                 results.append(ans[2:])
@@ -121,13 +121,18 @@ async def graphql_connection(places, preferences):
         return results
 
 def get_request(place, preferences):
-    new_preferences = []
-    for pref in preferences:
+    new_preferences = [[],[]]
+    for pref in preferences[0]:
         similar_words = get_prefs(pref)
         if similar_words:
-            new_preferences.extend(similar_words)
-    new_preferences.extend(preferences)
-    new_preferences = list(set(new_preferences))
+            new_preferences[0].extend(similar_words)
+    for pref in preferences[1]:
+        similar_words = get_prefs(pref)
+        if similar_words:
+            new_preferences[1].extend(similar_words)
+    new_preferences[0].extend(preferences[0])
+    new_preferences[1].extend(preferences[1])
+    # new_preferences = list(set(new_preferences))
     return asyncio.run(graphql_connection(place, new_preferences))
 
 
