@@ -4,7 +4,11 @@ import asyncio
 import time 
 import json
 import random
+import re
 from gql import Client, gql
+from collections import defaultdict
+from collections import Counter
+
 from gql.transport.aiohttp import AIOHTTPTransport
 
 interests = ['''food''','''activities''']
@@ -13,8 +17,8 @@ def get_features():
     f = open('app/irsystem/controllers/features_vecs_lda.json',)
     data = json.load(f)
     categories = []
-    for diction in data:
-        categories.append(list(diction.keys()))
+    for one_list in data:
+        categories.append(one_list)
     return categories
 
 features = get_features()
@@ -52,7 +56,6 @@ def getQuery(interest,place, offset):
                     }
                     reviews {
                         text
-                        rating
                     }
                 }
             }
@@ -60,33 +63,61 @@ def getQuery(interest,place, offset):
     ''')
     return query
 
-async def execute_query(session, interest, place, preferences):
-    result = await session.execute(getQuery(interest,place,'''0''')) 
-    result2 = await session.execute(getQuery(interest,place,'''50'''))
-    countlist = []
+def make_tf(query, reviews):
+    tf = {}
+    query = set(query)
+    for word in reviews:
+        if word in query:
+            if word in tf:
+                tf[word] += 1
+            else:
+                tf[word] = 1
+    for key in tf:
+        tf[key] /= len(reviews)
+    return tf
+
+def similarity_measure(query,merged_reviews,tf):
+    num = 0
+    denom = 0
+    for word in query:
+        if word in tf:
+            num += min(1/len(query),tf[word])
+            denom += max(1/len(query),tf[word])
+        else:
+            denom += 1/len(query)
+    return num/denom
+
+def similarity_measure_businesses(result, preferences, countlist):
     for business in range(len(result['search']['business'])):
         counter = 0
         merged_reviews = ""
-        merged_reviews += result['search']['business'][business]['name']
+        merged_reviews += " " + result['search']['business'][business]['name']
         for review in range(len(result['search']['business'][business]['reviews'])):
-            merged_reviews += result['search']['business'][business]['reviews'][review]['text']
+            merged_reviews += " " + result['search']['business'][business]['reviews'][review]['text']
         for categories in range(len(result['search']['business'][business]['categories'])):
             merged_reviews += " " + result['search']['business'][business]['categories'][categories]['title']
-        for pref in preferences:
-            counter+= merged_reviews.count(pref)
-        countlist.append((counter, result['search']['business'][business]['name'], result['search']['business'][business]['url']))
-    for business in range(len(result2['search']['business'])):
-        counter = 0
-        merged_reviews = ""
-        merged_reviews += result['search']['business'][business]['name']
-        for review in range(len(result2['search']['business'][business]['reviews'])):
-            merged_reviews += result2['search']['business'][business]['reviews'][review]['text']
-        for categories in range(len(result2['search']['business'][business]['categories'])):
-            merged_reviews += " " + result2['search']['business'][business]['categories'][categories]['title']
-        for pref in preferences:
-            counter+= merged_reviews.count(pref)
-        denom = len(merged_reviews.split(' ')) + 1 + len(preferences)
-        countlist.append((counter/denom, result2['search']['business'][business]['name'], result2['search']['business'][business]['url']))
+        # make everything lowercase
+        merged_reviews = merged_reviews.lower()
+        #remove special chars
+        new_merged_reviews = re.sub(r"[^a-zA-Z#]", " ", merged_reviews)
+        # remove words that are 1 or 2 letters
+        new_merged_reviews = re.sub("\b\w{1,2}\b", " ", new_merged_reviews)
+        new_merged_reviews = re.findall(r"[a-z]+", new_merged_reviews)
+        # convert reviews & preferences to stemmed list
+        tf = make_tf(preferences,new_merged_reviews)
+        countlist.append((similarity_measure(preferences,merged_reviews,tf), result['search']['business'][business]['name'], result['search']['business'][business]['url']))
+
+async def execute_query(session, interest, place, preferences):
+    result = await session.execute(getQuery(interest,place,'''0''')) 
+    result2 = await session.execute(getQuery(interest,place,'''50'''))
+    result3 = await session.execute(getQuery(interest,place,'''100'''))
+    result4 = await session.execute(getQuery(interest,place,'''150'''))
+
+    countlist = [] 
+    similarity_measure_businesses(result, preferences, countlist)
+    similarity_measure_businesses(result2, preferences, countlist)
+    similarity_measure_businesses(result3, preferences, countlist)
+    similarity_measure_businesses(result4, preferences, countlist)
     countlist.sort(key=lambda tup: tup[0], reverse=True)
     new_list = [seq[1:] for seq in countlist]
     return new_list[:3]
@@ -95,9 +126,10 @@ async def execute_query(session, interest, place, preferences):
 # We use a `backoff` decorator to reconnect using exponential backoff in case of connection failure.
 
 #@backoff.on_exception(backoff.expo, Exception, max_time=300)
-async def graphql_connection(places, preferences):
+async def graphql_connection(places, food_preferences, activity_preferences):
     results = []
     api_key = getAPIKey()
+    print(api_key)
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),
             'Content-Type': "application/json"}
@@ -107,12 +139,12 @@ async def graphql_connection(places, preferences):
     async with client as session:
         for i in range(0,len(places),2):
             spot = places[i]
-            task1 = asyncio.create_task(execute_query(session,interests[0],spot,preferences[0])) 
-            task2 = asyncio.create_task(execute_query(session,interests[1],spot,preferences[1])) 
+            task1 = asyncio.create_task(execute_query(session,interests[0],spot,food_preferences[i])) 
+            task2 = asyncio.create_task(execute_query(session,interests[1],spot,activity_preferences[i])) 
             if i + 1 < len(places):
                 spot2 = places[i+1]
-                task3 = asyncio.create_task(execute_query(session,interests[0],spot2,preferences[0])) 
-                task4 = asyncio.create_task(execute_query(session,interests[1],spot2,preferences[1])) 
+                task3 = asyncio.create_task(execute_query(session,interests[0],spot2,food_preferences[i+1])) 
+                task4 = asyncio.create_task(execute_query(session,interests[1],spot2,activity_preferences[i+1])) 
                 ans = await asyncio.gather(task1, task2, task3, task4)
                 results.append(ans[:2])
                 results.append(ans[2:])
@@ -121,18 +153,35 @@ async def graphql_connection(places, preferences):
         return results
 
 def get_request(place, preferences):
-    new_preferences = [[],[]]
-    for pref in preferences[0]:
+    food_preferences = preferences[0]
+    activity_preferences = preferences[1]
+
+    new_food_preferences = [[]] * len(food_preferences)
+    new_activity_preferences = [[]] * len(activity_preferences)
+        
+    for i in range(len(new_food_preferences)):
+        pref = food_preferences[i]
         similar_words = get_prefs(pref)
         if similar_words:
-            new_preferences[0].extend(similar_words)
-    for pref in preferences[1]:
+            temp_list = new_food_preferences[i][:]
+            temp_list += similar_words
+            new_food_preferences[i] = temp_list
+        temp_list = new_food_preferences[i][:]
+        temp_list += [pref]
+        new_food_preferences[i] = temp_list
+        new_food_preferences[i] = list(set(new_food_preferences[i]))
+    for i in range(len(new_activity_preferences)):
+        pref = activity_preferences[i]
         similar_words = get_prefs(pref)
         if similar_words:
-            new_preferences[1].extend(similar_words)
-    new_preferences[0].extend(preferences[0])
-    new_preferences[1].extend(preferences[1])
-    # new_preferences = list(set(new_preferences))
-    return asyncio.run(graphql_connection(place, new_preferences))
+            temp_list = new_activity_preferences[i][:]
+            temp_list += similar_words
+            new_activity_preferences[i] = temp_list
+        temp_list = new_activity_preferences[i][:]
+        temp_list += [pref]
+        new_activity_preferences[i] = temp_list
+        new_activity_preferences[i] = list(set(new_activity_preferences[i]))
+
+    return asyncio.run(graphql_connection(place, new_food_preferences, new_activity_preferences))
 
 
