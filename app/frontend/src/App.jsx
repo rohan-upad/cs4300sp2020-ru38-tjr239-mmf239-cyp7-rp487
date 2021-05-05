@@ -191,7 +191,7 @@ class App extends Component {
                     </div>
                     <div className = 'search-item'>
                       <div className = "search-item-main"> 
-                        <img src = {activityItem[4]} className = "search-item-image"></img>
+                        <img src = {activityItem[4]} alt = 'search-image' className = "search-item-image"></img>
                         <p className = "search-item-title">{activityItem[0]}</p>
                       </div>
                       <div className = 'search-item-metadata'>
@@ -332,7 +332,7 @@ class App extends Component {
                 </div>
                   <button id='go-button' type="submit" className="btn btn-info" onClick={this.handleSearch}> Go! </button>
             </form>
-            <img className = 'home-art' src = {homeArt}></img>
+            <img className = 'home-art' alt = 'search-image' src = {homeArt}></img>
           </div>
         </div>
         
