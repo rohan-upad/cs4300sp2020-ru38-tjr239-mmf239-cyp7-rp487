@@ -18,8 +18,8 @@ def get_features():
     f = open('app/irsystem/controllers/features_vecs_lda.json',)
     data = json.load(f)
     categories = []
-    for one_list in data:
-        categories.append(one_list)
+    for diction in data:
+        categories.append(list(diction.keys()))
     return categories
 
 
