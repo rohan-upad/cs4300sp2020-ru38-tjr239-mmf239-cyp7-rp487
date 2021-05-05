@@ -100,7 +100,6 @@ def similarity_measure(query, merged_reviews, tf):
 
 def similarity_measure_businesses(result, preferences, countlist):
     new_prefs = [porter.stem(word) for word in preferences]
-    print(new_prefs)
     for business in range(len(result['search']['business'])):
         counter = 0
         merged_reviews = ""
