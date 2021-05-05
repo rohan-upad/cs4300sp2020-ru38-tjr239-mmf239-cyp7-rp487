@@ -250,21 +250,21 @@ input:clicked {
 }
 
 .search-item-container:hover .star-rating {
-    opacity: 20%;
+    opacity: .2;
     transition: none;
 }
 
 .search-item-container:hover img {
-    opacity: 100%;
+    opacity: 1;
 }
 
 .search-link:hover {
     transition: .3s ease;
-    opacity: 80%;
+    opacity: .8;
 }
 
 .link-content:hover {
-    opacity: 100%;
+    opacity: 1;
 }
 
 .search-link a:hover {
