@@ -309,7 +309,8 @@ class App extends Component {
                     onChange = {this.handleInputChange}/>
                   {this.state.stops.length <= 3 ? 
                   <button id='add-button'className="btn btn-info" onClick={this.addStop}> 
-                    Add Stop
+                    <p>Add Stop</p>
+                    <img src = {plus}></img>
                   </button>
                   : <div className ='spacer'></div>}
                   </div>
