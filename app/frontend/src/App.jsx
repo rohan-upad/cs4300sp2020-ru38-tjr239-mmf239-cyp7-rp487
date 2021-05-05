@@ -4,7 +4,6 @@ import ReactStars from "react-rating-stars-component";
 import axios from 'axios';
 import logo from './roam-logo.jpg';
 import homeArt from './home-art.png';
-import starIcon from './Star.svg';
 import exit from './icon/maps/transit_enterexit_24px.png';
 import plus from './add_24px.png';
 
