@@ -10,6 +10,9 @@ from collections import defaultdict
 from collections import Counter
 
 from gql.transport.aiohttp import AIOHTTPTransport
+from nltk.stem import PorterStemmer
+porter = PorterStemmer()
+
 
 interests = ['''food''', '''activities''']
 
@@ -96,6 +99,8 @@ def similarity_measure(query, merged_reviews, tf):
 
 
 def similarity_measure_businesses(result, preferences, countlist):
+    new_prefs = [porter.stem(word) for word in preferences]
+    print(new_prefs)
     for business in range(len(result['search']['business'])):
         counter = 0
         merged_reviews = ""
@@ -119,9 +124,10 @@ def similarity_measure_businesses(result, preferences, countlist):
         # remove words that are 1 or 2 letters
         new_merged_reviews = re.sub("\b\w{1,2}\b", " ", new_merged_reviews)
         new_merged_reviews = re.findall(r"[a-z]+", new_merged_reviews)
+        new_merged_reviews = [porter.stem(word) for word in new_merged_reviews]
         # convert reviews & preferences to stemmed list
         tf = make_tf(preferences, new_merged_reviews)
-        countlist.append((similarity_measure(preferences, merged_reviews, tf),
+        countlist.append((similarity_measure(new_prefs, merged_reviews, tf),
                           result['search']['business'][business]['name'], result['search']['business'][business]['url'], category_str, result['search']['business'][business]['rating'], result['search']['business'][business]['photos'][0]))
 
 
@@ -200,7 +206,7 @@ def get_request(place, preferences):
             temp_list += [pref_word]
             new_food_preferences[i] = temp_list
             new_food_preferences[i] = list(set(new_food_preferences[i]))
-       
+
     for i in range(len(new_activity_preferences)):
         pref = activity_preferences[i]
         pref_list = pref.split(",")
@@ -213,7 +219,7 @@ def get_request(place, preferences):
             temp_list = new_activity_preferences[i][:]
             temp_list += [pref_word]
             new_activity_preferences[i] = temp_list
-            new_activity_preferences[i] = list(set(new_activity_preferences[i]))
-
+            new_activity_preferences[i] = list(
+                set(new_activity_preferences[i]))
 
     return asyncio.run(graphql_connection(place, new_food_preferences, new_activity_preferences))
