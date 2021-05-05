@@ -161,15 +161,19 @@ def get_request(place, preferences):
         
     for i in range(len(new_food_preferences)):
         pref = food_preferences[i]
-        similar_words = get_prefs(pref)
-        if similar_words:
+        pref_list = pref.split(", ")
+        print(pref_list)
+        for pref_word in pref_list:
+            similar_words = get_prefs(pref)
+            if similar_words:
+                temp_list = new_food_preferences[i][:]
+                temp_list += similar_words
+                new_food_preferences[i] = temp_list
             temp_list = new_food_preferences[i][:]
-            temp_list += similar_words
+            temp_list += [pref_word]
             new_food_preferences[i] = temp_list
-        temp_list = new_food_preferences[i][:]
-        temp_list += [pref]
-        new_food_preferences[i] = temp_list
-        new_food_preferences[i] = list(set(new_food_preferences[i]))
+            new_food_preferences[i] = list(set(new_food_preferences[i]))
+       
     for i in range(len(new_activity_preferences)):
         pref = activity_preferences[i]
         similar_words = get_prefs(pref)
@@ -181,6 +185,8 @@ def get_request(place, preferences):
         temp_list += [pref]
         new_activity_preferences[i] = temp_list
         new_activity_preferences[i] = list(set(new_activity_preferences[i]))
+    print(new_food_preferences)
+    print(new_activity_preferences)
 
     return asyncio.run(graphql_connection(place, new_food_preferences, new_activity_preferences))
 
