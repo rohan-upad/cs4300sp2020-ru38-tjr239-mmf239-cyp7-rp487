@@ -1,5 +1,5 @@
-import './App.css';
 import React, { Component } from 'react';
+import './App.css';
 import ReactStars from "react-rating-stars-component";
 import axios from 'axios';
 import logo from './roam-logo.jpg';
@@ -29,6 +29,10 @@ class App extends Component {
     this.handleStopInputChange = this.handleStopInputChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.addStop = this.addStop.bind(this);
+  }
+
+  componentDidMount() {
+    document.body.style.zoom = .8
   }
 
   handleInputChange(e) {
