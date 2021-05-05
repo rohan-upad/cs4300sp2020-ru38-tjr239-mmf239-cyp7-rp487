@@ -1,6 +1,36 @@
 .App {
-    margin-left: 40px;
-    margin-top: 30px;
+    display: block;
+    margin: auto;
+    margin-top: 40px;
+    width: 1560px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: baseline;
+}
+
+h1 {
+    font-size: 40px;
+    margin-right: 22px;
+}
+
+h2 {
+    font-weight: 800;
+    font-size: 30px;
+}
+
+label {
+    color: #034F0A;
+    font-weight: 600;
+    font-size: 24px;
+    margin-right: 40px;
+}
+
+.subtitle {
+    font-size: 30px;
+    font-weight: 300;
 }
 
 a {
@@ -10,24 +40,84 @@ a {
 .main-container {
     border-radius: 10px;
     padding: 30px;
-    width: 1000px;
+    width: 80%;
+    width: 1500px;
     background: #F9FFF9;
-    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     margin-bottom: 30px;
+    border: 1px solid #f5f5f5;
+}
+
+.main-content {
+    display: block;
+    margin: auto;
+    width: 1400px;
+}
+
+.search-form {
+    width: 100%;
 }
 
 .input-section {
     display: flex;
     justify-content: space-between;
-    width: 900px
+    width: 100%;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+header {
+    display: flex;
+    align-items: center;
+}
+
+.header-text {
+    display: flex;
+    align-items: baseline;
+}
+
+svg {
+    display: block;
+    padding: 0px;
+    margin: 0px;
+}
+
+.roam-logo {
+    height: 80px;
+    fill: #EF422A;
+    margin-right: 16px;
 }
 
 input {
     margin-right: 20px;
     height: 30px;
-    width: 220px;
-    padding-left: 10px;
+    width: 240px;
+    padding-left: 20px;
+    padding-top: 5px;
+    background: #FFFFFF;
+    border: none;
+    height: 60px;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: 'Hind Siliguri';
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 40px white inset !important;
+}
+
+::placeholder {
+    color: #868686;
+    font-size: 20px;
+    font-family: 'Hind Siliguri';
+}
+
+input:clicked {
+    background-color: white;
 }
 
 .input-group {
@@ -35,49 +125,296 @@ input {
     align-items: center;
 }
 
+.preferences-input {
+    width: 340px;
+}
+
 .search-result {
     padding: 30px;
     display: flex;
-    background-color: #F9FFF9;
-    margin-bottom: 10px;
-    width: 1000px;
     justify-content: space-between;
+    align-items: baseline;
+    background-color: #F9FFF9;
+    margin: auto;
+    margin-bottom: 30px;
+    width: 1500px;
     border-radius: 10px;
-    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.25);
+    border: 1px solid #f5f5f5;
 }
 
 .search-result-content {
     display: flex;
     justify-content: space-between;
-    width: 650px;
+    width: 1230px;
 }
 
 .search-result-group {
     margin-right: 70px;
 }
 
-.action-buttons {
-    display: flex;
-    width: 850px;
-    justify-content: flex-end;
-}
-
-.input-section {
-    margin-bottom: 30px;
+.search-item {
+    background-color: white;
+    border-radius: 10px;
+    border: .5px solid #e8e8e8;
+    width: 460px;
+    height: 80px;
     display: flex;
     align-items: center;
-    width: 900px;
+    justify-content: space-between;
+    padding-left: 10px;
+    margin-bottom: 16px;
+}
+
+.search-item-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 12px;
+    background-color: gray;
+    padding: 0px;
+}
+
+.search-item-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.15em;
+}
+
+.search-item-main {
+    display: flex;
+    align-items: center;
+}
+
+.search-item-metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.search-item-categories {
+    font-size: 16px;
+    font-weight: 400;
+    color: #757575;
+    margin-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 1em;
+    text-align: right;
+}
+
+.search-link {
+    width: 460px;
+    height: 80px;
+    position: absolute;
+    font-size: 20px;
+    background-color: black;
+    color: white;
+    font-weight: 800;
+    width: 470px;
+    border-radius: 10px;
+    border: .5px solid #e8e8e8;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0%;
+}
+
+.search-link a {
+    border-bottom: 5px solid transparent;
+    padding-top: 5px;
+    padding-bottom: 1px;
+    line-height: 1.2em;
+}
+
+.search-link img {
+    padding-top: 5px;
+    height: 16px;
+}
+
+.search-item-container {
+    width: 475px;
+    height: 85px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.search-item-container a {
+    text-decoration: none;
+    color: white;
+}
+
+.search-item-container:hover .star-rating {
+    opacity: 20%;
+    transition: none;
+}
+
+.search-item-container:hover img {
+    opacity: 100%;
+}
+
+.search-link:hover {
+    transition: .3s ease;
+    opacity: 80%;
+}
+
+.link-content:hover {
+    opacity: 100%;
+}
+
+.search-link a:hover {
+    border-bottom: 5px solid white;
+}
+
+.search-link a:active {
+    color: rgb(230, 230, 230);
+    border-bottom: 5px solid rgb(230, 230, 230);
+}
+
+.star-rating {
+    margin-bottom: 5px;
+    pointer-events: none;
 }
 
 .remove-button {
-    width: 30px;
-    background-color: aliceblue;
+    display: flex;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 60px;
+    margin-left: 10px;
+    background-color: transparent;
+    opacity: 0%;
+}
+
+.remove-button:hover {
+    transition: ease .2s;
+    opacity: 100%;
+}
+
+button {
+    outline: none;
 }
 
 .spacer {
-    width: 30px
+    width: 140px;
+    margin-left: 10px;
+}
+
+#add-button {
+    margin-left: 10px;
+    border: 3px solid #086211;
+    border-radius: 10px;
+    opacity: 100%;
+    background-color: transparent;
+    color: #034F0A;
+    width: 140px;
+    height: 62px;
+    font-family: 'Hind Siliguri';
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#add-button:hover {
+    transition: .1s ease;
+    background: #f1f6f1;
+}
+
+#add-button:active {
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.25);
+}
+
+#add-button img {
+    height: 24px;
+    width: 24px;
+    margin-left: 2px;
 }
 
 #go-button {
     margin-left: 10px;
+    border: none;
+    background: #EF412A;
+    color: white;
+    width: 140px;
+    height: 60px;
+    border-radius: 10px;
+    font-family: 'Hind Siliguri';
+    font-size: 24px;
+    font-weight: 800;
+    float: right;
+}
+
+#go-button:hover {
+    transition: .2s ease;
+    box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.25);
+    color: white;
+}
+
+#go-button:active {
+    background-color: #e03a24;
+}
+
+.home-art {
+    display: block;
+    height: 500px;
+    width: 720px;
+    margin: auto;
+    margin-left: 400px;
+    margin-bottom: 0px;
+}
+
+.bottom-space {
+    height: 200px;
+    width: 100%;
+}
+
+.search-location {
+    margin-right: 80px;
+}
+
+.rec-header {
+    margin-top: 100px;
+}
+
+.label-section {
+    width: 1030px;
+    margin-left: 196px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+}
+
+.label-section h3 {
+    margin-left: 6px;
+}
+
+.label-section p {
+    font-weight: 500;
+    font-size: 18px;
+    color: #525252;
+    margin-right: 2px;
+}
+
+.location-label {
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.preference-label {
+    width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
