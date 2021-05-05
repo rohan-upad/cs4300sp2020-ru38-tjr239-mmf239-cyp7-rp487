@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.38aba73e.chunk.css",
+    "main.js": "/static/js/main.a4c3dbfb.chunk.js",
+    "main.js.map": "/static/js/main.a4c3dbfb.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.02dfa7f6.js",
+    "runtime-main.js.map": "/static/js/runtime-main.02dfa7f6.js.map",
+    "static/js/2.3a843276.chunk.js": "/static/js/2.3a843276.chunk.js",
+    "static/js/2.3a843276.chunk.js.map": "/static/js/2.3a843276.chunk.js.map",
+    "static/js/3.968ed90b.chunk.js": "/static/js/3.968ed90b.chunk.js",
+    "static/js/3.968ed90b.chunk.js.map": "/static/js/3.968ed90b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.38aba73e.chunk.css.map": "/static/css/main.38aba73e.chunk.css.map",
+    "static/js/2.3a843276.chunk.js.LICENSE.txt": "/static/js/2.3a843276.chunk.js.LICENSE.txt",
+    "static/media/home-art.5572bc1e.png": "/static/media/home-art.5572bc1e.png",
+    "static/media/roam-logo.68cf615b.jpg": "/static/media/roam-logo.68cf615b.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.02dfa7f6.js",
+    "static/js/2.3a843276.chunk.js",
+    "static/css/main.38aba73e.chunk.css",
+    "static/js/main.a4c3dbfb.chunk.js"
+  ]
+}
