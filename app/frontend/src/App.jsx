@@ -307,9 +307,7 @@ class App extends Component {
                     <input id="activity-preferences-input" type="text" name="startActivities" className="preferences-input" 
                     placeholder="Enter activity preferences" value = {this.state.startActivity} 
                     onChange = {this.handleInputChange}/>
-                    <button id='add-button' className="btn btn-info" onClick={this.addStop}> 
-                      Add Stop
-                    </button>
+                    <div id='add-button' className="btn btn-info" onClick={this.addStop}> Add Stop </div>
                   </div>
                 </div>
                 {this.renderStops()}
