@@ -187,6 +187,7 @@ def get_request(place, preferences):
 
     for i in range(len(new_food_preferences)):
         pref = food_preferences[i]
+        pref = pref.lower()
         pref_list = re.findall(r"[a-z]+", pref)
         for pref_word in pref_list:
             pref_word = pref_word.lower().strip()
@@ -202,9 +203,9 @@ def get_request(place, preferences):
 
     for i in range(len(new_activity_preferences)):
         pref = activity_preferences[i]
+        pref = pref.lower()
         pref_list = re.findall(r"[a-z]+", pref)
         for pref_word in pref_list:
-            pref_word = pref_word.lower().strip()
             similar_words = get_prefs(pref_word)
             if similar_words:
                 temp_list = new_activity_preferences[i][:]
