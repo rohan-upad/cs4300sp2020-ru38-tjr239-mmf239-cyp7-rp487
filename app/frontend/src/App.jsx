@@ -123,8 +123,6 @@ class App extends Component {
 
   processResponse(result) {
     let output = []
-    console.log('THIS IS THE RESULT')
-    console.log(result)
     for (const location in result) {
       let dic = {}
       dic.location = location
@@ -237,8 +235,6 @@ class App extends Component {
 
     //list of dictionaries
     let user_input = this.exportState()
-    console.log('USER INPUT')
-    console.log(user_input)
   
     axios.get('/search', {
         params:{
@@ -246,9 +242,6 @@ class App extends Component {
         }
       } 
     ).then(response => {
-      console.log("SUCCESS")
-      console.log(response);
-      console.log(this.processResponse(response['data']));
       this.setState({
         searched: true,
         results: this.processResponse(response['data'])
@@ -259,7 +252,6 @@ class App extends Component {
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({top: y, behavior: 'smooth'});
     }).catch(error => {
-      console.log("FAIL")
       console.log(error);
     })
   }

@@ -25,7 +25,6 @@ def search():
 			'', ''
 		]
 		data = get_request(locations, preferences)
-		print(data)
 
 		for i in range(len(locations)):
 			location = locations[i]
