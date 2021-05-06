@@ -150,7 +150,6 @@ async def execute_query(session, interest, place, preferences):
 async def graphql_connection(places, food_preferences, activity_preferences):
     results = []
     api_key = getAPIKey()
-    print(api_key)
     # define our authentication process.
     header = {'Authorization': 'bearer {}'.format(api_key),
               'Content-Type': "application/json"}
@@ -216,5 +215,4 @@ def get_request(place, preferences):
             new_activity_preferences[i] = temp_list
             new_activity_preferences[i] = list(
                 set(new_activity_preferences[i]))
-    print(new_food_preferences)
     return asyncio.run(graphql_connection(place, new_food_preferences, new_activity_preferences))
