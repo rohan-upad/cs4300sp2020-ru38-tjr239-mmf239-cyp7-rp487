@@ -146,7 +146,7 @@ class App extends Component {
               {result.food.map(foodItem =>
                 <div className = "search-item-container">
                     <div className = "search-link">
-                      <a href = {foodItem[1]} className = 'link-content'> View on Yelp <img src = {exit}></img> </a> 
+                      <a href = {foodItem[1]} target="_blank" className = 'link-content'> View on Yelp <img src = {exit}></img> </a> 
                     </div>
                     <div className = 'search-item'>
                           <div className = "search-item-main"> 
