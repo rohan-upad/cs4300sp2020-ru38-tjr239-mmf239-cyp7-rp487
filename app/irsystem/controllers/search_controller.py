@@ -11,8 +11,6 @@ net_id = "Rohan Upadhyayula: ru38 Timothy Reeves: tj3239 Maddie Franke: mmf239 C
 @irsystem.route('/search', methods=['GET'])
 def search():
 	user_input = json.loads(request.args.get('input'))
-	print('USER INPUT')
-	print(user_input)
 	locations = list(map(lambda inp: inp['location'], user_input))
 	food_prefs = list(map(lambda inp: inp['food'], user_input))
 	activity_prefs = list(map(lambda inp: inp['activities'], user_input))
@@ -27,7 +25,6 @@ def search():
 			'', ''
 		]
 		data = get_request(locations, preferences)
-		print(data)
 
 		for i in range(len(locations)):
 			location = locations[i]
